@@ -21,6 +21,7 @@ app.use("/api/user", router);
 app.get("/api/user", (req, res) => {
   return res.json({ message: "User GET works!" });
 });
+app.get("/", (req, res) => res.send("API is running"));
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
