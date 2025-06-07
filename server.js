@@ -9,6 +9,7 @@ app.use(express.json());
 app.use(cors({
   origin: "http://localhost:4001"
 }));
+const Port=process.env.PORT||4000;
 app.use("/api/user",router);
 mongoose.connect(process.env.MONGO_URI).then(()=>{
     console.log("Connect to MONGO DB");
@@ -16,7 +17,7 @@ mongoose.connect(process.env.MONGO_URI).then(()=>{
 }).catch(error=>{
     console.log("Error in Connecting to MONGODB :"+error);
 })
-app.listen(4000,()=>{
+app.listen(Port,()=>{
     console.log("Server is running on Port 4000");
 })
 
