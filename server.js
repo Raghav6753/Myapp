@@ -12,7 +12,7 @@ app.use(cors({
   origin: "http://localhost:4001"
 }));
 
-const Port = process.env.PORT || 4000;
+const Port = process.env.PORT || 10000;
 
 // ✅ Correct usage of router
 app.use("/api/user", router);
