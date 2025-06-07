@@ -7,7 +7,7 @@ const app=express();
 dotenv.config();
 app.use(express.json());
 app.use(cors({
-  origin: "https://sigmajee.netlify.app"
+  origin: "http://localhost:4001"
 }));
 app.use("/api/user",router);
 mongoose.connect(process.env.MONGO_URI).then(()=>{
