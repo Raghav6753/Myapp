@@ -10,7 +10,9 @@ app.use(cors({
   origin: "http://localhost:4001"
 }));
 const Port=process.env.PORT||4000;
-app.use("/api/user",router);
+app.use("/api/user",(req,res)=>{
+    return res.json({message:"Helloo "});
+},router);
 mongoose.connect(process.env.MONGO_URI).then(()=>{
     console.log("Connect to MONGO DB");
     
