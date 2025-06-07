@@ -4,33 +4,25 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import router from "./Routes/user.route.js";
 
-const app = express();
 dotenv.config();
+const app = express();
 
 app.use(express.json());
+
+// 🔧 Enable CORS for both local & Netlify frontend
 app.use(cors({
-  origin: "http://localhost:4001"
+  origin: ["http://localhost:4001", "https://your-netlify-site.netlify.app"]
 }));
 
-const Port = process.env.PORT || 10000;
-
-// ✅ Correct usage of router
+// ✅ Routes
 app.use("/api/user", router);
-
-// ✅ Optional: add a GET handler directly
-app.get("/api/user", (req, res) => {
-  return res.json({ message: "User GET works!" });
-});
+app.get("/api/user", (req, res) => res.json({ message: "User GET works!" }));
 app.get("/", (req, res) => res.send("API is running"));
 
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log("Connected to MONGO DB");
-  })
-  .catch(error => {
-    console.log("Error in Connecting to MONGODB: " + error);
-  });
+  .then(() => console.log("Connected to MONGO DB"))
+  .catch(err => console.log("MongoDB Error: " + err));
 
-app.listen(Port, () => {
-  console.log(`Server is running on Port ${Port}`, Port);
-});
+// 🔧 Listen on process.env.PORT
+const Port = process.env.PORT || 10000;
+app.listen(Port, () => console.log(`Server running on port ${Port}`));
