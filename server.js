@@ -11,7 +11,7 @@ app.use(express.json());
 
 // 🔧 Enable CORS for both local & Netlify frontend
 app.use(cors({
-  origin: ["http://localhost:4001", "https://your-netlify-site.netlify.app"]
+  origin: ["http://localhost:4001", "https://sigmajee.netlify.app"]
 }));
 
 // ✅ Routes
