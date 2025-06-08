@@ -2,7 +2,29 @@ import { User, UserType } from "../Model/User.model.js"
 import bcrypt from "bcryptjs"
 import CreateToken from "../jwt/CreateToken.js";
 import Razorpay from "razorpay";
+import dotenv from "dotenv";
+// 📁 In your controller (e.g., userController.js or wherever you want)
+import crypto from "crypto";
 
+export const verifyPayment = async (req, res) => {
+  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+
+  const secret = process.env.RAZORPAY_SECRET;
+
+  const generated_signature = crypto
+    .createHmac("sha256", secret)
+    .update(razorpay_order_id + "|" + razorpay_payment_id)
+    .digest("hex");
+
+  if (generated_signature === razorpay_signature) {
+    res.status(200).json({ success: true, message: "Payment Verified" });
+  } else {
+    res.status(400).json({ success: false, message: "Invalid Signature" });
+  }
+};
+
+
+dotenv.config(); // This MUST be called at the top if not already
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_SECRET,
@@ -78,7 +100,7 @@ export const CreateOrder = async (req, res) => {
   const { amount } = req.body;
 
   const options = {
-    amount: amount * 100,
+    amount: amount*100,
     currency: "INR",
     receipt: `receipt_order_${Date.now()}`,
   };
