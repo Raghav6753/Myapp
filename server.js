@@ -3,7 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import router from "./Routes/user.route.js";
-
+import Razorpay from "razorpay"
 dotenv.config();
 const app = express();
 
@@ -11,9 +11,8 @@ app.use(express.json());
 
 // 🔧 Enable CORS for both local & Netlify frontend
 app.use(cors({
-  origin: ["http://localhost:4001", "https://sigmajee.netlify.app"]
+  origin: ["http://localhost:5174", "https://sigmajee.netlify.app"]
 }));
-
 // ✅ Routes
 app.use("/api/user", router);
 app.get("/api/user", (req, res) => res.json({ message: "User GET works!" }));
