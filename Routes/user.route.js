@@ -6,5 +6,4 @@ router.post("/signup",signup);
 router.post("/logout",logout)
 router.post("/create-order",CreateOrder);
 router.post("/verify-payment", verifyPayment);
-
 export default router;
