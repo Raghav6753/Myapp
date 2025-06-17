@@ -44,7 +44,7 @@ export const login = async (req, res) => {
     return res.status(404).json({ message: "User Does Not Exist" });
   }
   if (!ExistingUser.isVerified) {
-     const token = crypto.randomBytes(32).toString("hex");
+    const token = crypto.randomBytes(32).toString("hex");
     const mailOptions = {
       from: process.env.EMAIL,
       to: Email,
@@ -79,17 +79,17 @@ export const signup = async (req, res) => {
   if (ExistingUser) {
     return res.status(400).json({ message: "User Already Exists" });
   }
- const token = crypto.randomBytes(32).toString("hex");
+  const token = crypto.randomBytes(32).toString("hex");
   const hashedPass = await bcrypt.hash(Password, 12);
   const NewUser = new User({
     Name,
     Email,
     Password: hashedPass,
-    verifyToken:token
+    verifyToken: token
   });
 
   await NewUser.save();
-  
+
   const NewUserType = new UserType({
     Email,
     Type,
@@ -161,4 +161,29 @@ export const verifyEmail = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ message: "Verification failed", error: error.message });
   }
+};
+export const SendOtp = (req, res) => {
+  const { user } = req.body;
+  const Email = user.Email;
+
+  const otp = Math.floor(100000 + Math.random() * 900000);
+
+  const mailOptions = {
+    from: process.env.EMAIL,
+    to: Email,
+    subject: "Otp For Verification",
+    html: `
+      <p>Here is the OTP for Sigma JEE verification. If you want to continue with the payment, use this OTP and do not share it with anyone.</p>
+      <h2>${otp}</h2>
+    `,
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error("Error sending mail:", error);
+      return res.status(500).json({ message: "Failed to send OTP" });
+    }
+    console.log("Email sent:", info.response);
+    return res.status(200).json({ otp });
+  });
 };
