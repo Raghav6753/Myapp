@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs"
 import CreateToken from "../jwt/CreateToken.js";
 import Razorpay from "razorpay";
 import dotenv from "dotenv";
+dotenv.config();
 // 📁 In your controller (e.g., userController.js or wherever you want)
 import crypto from "crypto";
 
@@ -23,8 +24,7 @@ export const verifyPayment = async (req, res) => {
   }
 };
 
-
-dotenv.config(); // This MUST be called at the top if not already
+// This MUST be called at the top if not already
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_SECRET,
