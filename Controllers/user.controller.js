@@ -102,7 +102,7 @@ export const signup = async (req, res) => {
     to: Email,
     subject: "Verify your email - SigmaJEE",
     html: `<p>Click the link to verify your email:</p>
-             <a href="http://localhost:5173/verify-email?token=${token}">Verify Email</a>`
+             <a href="https://sigmajee.netlify.app//verify-email?token=${token}">Verify Email</a>`
   }
   await transporter.sendMail(mailOptions);
   CreateToken(NewUser._id, res);
