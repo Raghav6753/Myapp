@@ -43,18 +43,18 @@ export const login = async (req, res) => {
   if (!ExistingUser) {
     return res.status(404).json({ message: "User Does Not Exist" });
   }
-  if (!ExistingUser.isVerified) {
-    const token = crypto.randomBytes(32).toString("hex");
-    const mailOptions = {
-      from: process.env.EMAIL,
-      to: Email,
-      subject: "Verify your email - SigmaJEE",
-      html: `<p>Click the link to verify your email:</p>
-             <a href="https://sigmajee.netlify.app/verify-email?token=${token}">Verify Email</a>`
-    }
-    await transporter.sendMail(mailOptions);
-    res.status(400).json("Verify Your Email First");
-  }
+  // if (!ExistingUser.isVerified) {
+  //   const token = crypto.randomBytes(32).toString("hex");
+  //   const mailOptions = {
+  //     from: process.env.EMAIL,
+  //     to: Email,
+  //     subject: "Verify your email - SigmaJEE",
+  //     html: `<p>Click the link to verify your email:</p>
+  //            <a href="https://sigmajee.netlify.app/verify-email?token=${token}">Verify Email</a>`
+  //   }
+  //   await transporter.sendMail(mailOptions);
+  //  return res.status(400).json({message:"Verify Your Email First"});
+  // }
   const RealPassword = ExistingUser.Password;
   const isValid = await bcrypt.compare(Password, RealPassword);
 
@@ -85,6 +85,7 @@ export const signup = async (req, res) => {
     Name,
     Email,
     Password: hashedPass,
+    isVerified:false,
     verifyToken: token
   });
 
@@ -187,3 +188,8 @@ export const SendOtp = (req, res) => {
     return res.status(200).json({ otp });
   });
 };
+export const DeleteUser=async (req,res)=>{
+  const {user}=req.body;
+ await User.deleteOne({ Email: user.Email });
+  return res.status(200).json({message:"User Deleted Successfully"});
+}
